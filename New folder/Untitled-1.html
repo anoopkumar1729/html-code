@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Journey Roadmap</title>
+  <style>
+    :root {
+      --bg-color: #0b0f19;
+      --card-bg: #161f30;
+      --accent-color: #38bdf8;
+      --accent-glow: rgba(56, 189, 248, 0.4);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --grid-color: rgba(255, 255, 255, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 40px 20px;
+      background-image: 
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+      background-size: 30px 30px;
+    }
+
+    .journey-container {
+      max-width: 1000px;
+      width: 100%;
+      position: relative;
+    }
+
+    .header-title {
+      font-size: 3rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      color: rgba(255, 255, 255, 0.05);
+      position: absolute;
+      top: -40px;
+      left: 0;
+      z-index: 0;
+      user-select: none;
+    }
+
+    .roadmap {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      position: relative;
+      z-index: 1;
+      margin-top: 40px;
+    }
+
+    .year-section {
+      position: relative;
+      background: rgba(22, 31, 48, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(8px);
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .year-section:hover {
+      border-color: var(--accent-color);
+      transform: translateY(-2px);
+    }
+
+    .year-tag {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .year-tag::after {
+      content: '';
+      flex: 1;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent-color), transparent);
+    }
+
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+    }
+
+    .event-card {
+      background: var(--bg-color);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 16px;
+      border-radius: 10px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .event-card:hover {
+      background: #1e293b;
+      box-shadow: 0 0 15px var(--accent-glow);
+      border-color: var(--accent-color);
+    }
+
+    .event-card .dot {
+      width: 10px;
+      height: 10px;
+      background-color: var(--accent-color);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--accent-color);
+      margin-bottom: 4px;
+    }
+
+    .event-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .event-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Responsive adjustment */
+    @media (max-width: 600px) {
+      .header-title {
+        font-size: 2rem;
+      }
+      .events-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="journey-container">
+    <div class="header-title">CHRONOLOGY</div>
+
+    <div class="roadmap">
+      
+      <!-- 2023 -->
+      <div class="year-section">
+        <div class="year-tag">2023</div>
+        <div class="events-grid">
+          <div class="event-card">
+            <div class="dot"></div>
+            <div class="event-title">SIH (Smart India Hackathon)</div>
+            <div class="event-desc">National Hackathon Participant</div>
+          </div>
+          <div class="event-card">
+            <div class="dot"></div>
+            <div class="event-title">IIT Delhi Rendezvous</div>
+            <div class="event-desc">Event Participation</div>
+          </div>
+          <div class="event-card">
+            <div class="dot"></div>
+            <div class="event-title">IIT Indore Hackathon</div>
+            <div class="event-desc">Hackathon Finalist</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2025 -->
+      <div class="year-section">
+        <div class="year-tag">2025</div>
+        <div class="events-grid">
+          <div class="event-card">
+            <div class="dot"></div>
+            <div class="event-title">Research Paper</div>
+            <div class="event-desc">Presentation & Publication</div>
+          </div>
+          <div class="event-card">
+            <div class="dot"></div>
+            <div class="event-title">IBM Internship</div>
+            <div class="event-desc">Technical Intern</div>
+          </div>
+          <div class="event-card">
+            <div class="dot"></div>
+            <div class="event-title">Infosys Springboard</div>
+            <div class="event-desc">Certification & Internship</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2026 -->
+      <div class="year-section">
+        <div class="year-tag">2026</div>
+        <div class="events-grid">
+          <div class="event-card">
+            <div class="dot"></div>
+            <div class="event-title">Future Industry Roles</div>
+            <div class="event-desc">Expanding Skills & Growth</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

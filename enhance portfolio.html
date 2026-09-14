@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Masterpiece Portfolio Journey Timeline</title>
+  
+  <!-- Premium Fonts: Tech + Sketch Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Grotesk:wght@400;600;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #080c14;
+      --grid-line: rgba(0, 243, 255, 0.05);
+      --cyan-glow: #00f3ff;
+      --purple-glow: #b026ff;
+      --orange-year: #ff8c00;
+      --text-main: #f0f6fc;
+      --text-muted: #8b949e;
+      --card-bg: rgba(13, 17, 23, 0.85);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Space Grotesk', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 20px;
+      overflow-x: hidden;
+      /* High-tech Blueprint Grid */
+      background-image: 
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 40px 40px;
+      position: relative;
+    }
+
+    /* Ambient Glow Background Spheres */
+    .ambient-glow-1 {
+      position: absolute; top: 10%; left: 15%; width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(0, 243, 255, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .ambient-glow-2 {
+      position: absolute; bottom: 15%; right: 10%; width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(176, 38, 255, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Big Watermarks */
+    .watermark {
+      position: absolute;
+      font-weight: 800;
+      font-size: clamp(4rem, 10vw, 8rem);
+      color: rgba(255, 255, 255, 0.02);
+      letter-spacing: 15px;
+      user-select: none;
+      pointer-events: none;
+      text-transform: uppercase;
+    }
+    .wm-top { top: 10px; left: 4%; }
+    .wm-bottom { bottom: 20px; right: 4%; }
+
+    /* Header Title */
+    .title-container {
+      text-align: center;
+      margin-bottom: 70px;
+      z-index: 2;
+    }
+    .main-title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      letter-spacing: 3px;
+      background: linear-gradient(135deg, #00f3ff, #b026ff, #ff8c00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+    }
+    .sub-title {
+      font-family: 'Kalam', cursive;
+      color: var(--cyan-glow);
+      font-size: 1.3rem;
+      margin-top: 5px;
+      opacity: 0.9;
+    }
+
+    /* Main Timeline Canvas */
+    .canvas-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      z-index: 2;
+    }
+
+    /* SVG Layer for Curved Snake Lines & Doodles */
+    .svg-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .path-bg {
+      stroke: rgba(255, 255, 255, 0.12);
+      stroke-width: 3;
+      stroke-dasharray: 8 8;
+      fill: none;
+    }
+
+    .path-pulse {
+      stroke: var(--cyan-glow);
+      stroke-width: 3;
+      stroke-dasharray: 15 300;
+      fill: none;
+      animation: flow 4s linear infinite;
+      filter: drop-shadow(0 0 8px var(--cyan-glow));
+    }
+
+    @keyframes flow {
+      0% { stroke-dashoffset: 315; }
+      100% { stroke-dashoffset: 0; }
+    }
+
+    /* Nodes Layout Grid Overlay */
+    .nodes-container {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      gap: 140px; /* Distance between rows */
+      padding: 40px 0;
+    }
+
+    .node-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+
+    .node-row.rtl {
+      flex-direction: row-reverse;
+    }
+
+    /* Single Node Style */
+    .timeline-node {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    /* Circle Styling */
+    .dot-outer {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--bg-dark);
+      border: 2px solid var(--cyan-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .dot-inner {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #fff;
+      transition: transform 0.3s ease;
+    }
+
+    .timeline-node:hover .dot-outer {
+      transform: scale(1.3);
+      background: var(--cyan-glow);
+      box-shadow: 0 0 25px rgba(0, 243, 255, 0.9);
+    }
+
+    .timeline-node:hover .dot-inner {
+      background: var(--bg-dark);
+    }
+
+    /* YEAR NODES (Special Highlighting) */
+    .timeline-node.year-node .dot-outer {
+      width: 44px;
+      height: 44px;
+      border-color: var(--orange-year);
+      box-shadow: 0 0 20px rgba(255, 140, 0, 0.4);
+      background: #120e0a;
+    }
+
+    .timeline-node.year-node .year-text {
+      font-weight: 800;
+      color: var(--orange-year);
+      font-size: 0.9rem;
+      font-family: 'Fira Code', monospace;
+    }
+
+    .timeline-node.year-node:hover .dot-outer {
+      background: var(--orange-year);
+      box-shadow: 0 0 30px rgba(255, 140, 0, 0.9);
+    }
+
+    .timeline-node.year-node:hover .year-text {
+      color: #000;
+    }
+
+    /* Node Labels */
+    .node-label {
+      position: absolute;
+      top: 38px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-align: center;
+      width: 120px;
+      color: var(--text-main);
+      text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+      pointer-events: none;
+      line-height: 1.2;
+    }
+
+    /* Handwritten Doodle Annotations (Original Image Vibe) */
+    .doodle-note {
+      position: absolute;
+      font-family: 'Kalam', cursive;
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 0.95rem;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    /* Glassmorphism Interactive Hover Cards */
+    .hover-card {
+      position: absolute;
+      bottom: 50px;
+      width: 240px;
+      padding: 16px;
+      background: var(--card-bg);
+      border: 1px solid rgba(0, 243, 255, 0.2);
+      backdrop-filter: blur(12px);
+      border-radius: 12px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7), 0 0 15px rgba(0, 243, 255, 0.1);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(15px) scale(0.95);
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    .hover-card h3 {
+      font-size: 0.95rem;
+      color: var(--cyan-glow);
+      margin-bottom: 6px;
+    }
+
+    .hover-card p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      font-family: 'Fira Code', monospace;
+    }
+
+    .hover-card .tag {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 3px 8px;
+      background: rgba(176, 38, 255, 0.2);
+      border: 1px solid rgba(176, 38, 255, 0.4);
+      color: #d89bff;
+      border-radius: 4px;
+      font-size: 0.68rem;
+    }
+
+    .timeline-node:hover .hover-card {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Responsive Mobile Fallback */
+    @media (max-width: 850px) {
+      .svg-layer { display: none; }
+      .nodes-container { gap: 60px; }
+      .node-row, .node-row.rtl {
+        flex-direction: column !important;
+        gap: 50px;
+      }
+      .node-label { position: relative; top: 8px; }
+      .hover-card { bottom: auto; top: 50px; }
+      .doodle-note { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Lighting Effects -->
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+
+  <!-- Background Watermarks -->
+  <div class="watermark wm-top">MY JOURNEY</div>
+  <div class="watermark wm-bottom">CHRONOLOGY</div>
+
+  <!-- Header Section -->
+  <div class="title-container">
+    <h1 class="main-title">Interactive Chronology</h1>
+    <div class="sub-title">~ From 10th Grade to Now ~</div>
+  </div>
+
+  <!-- Timeline Wrapper -->
+  <div class="canvas-wrapper">
+
+    <!-- SVG Layer for Continuous Smooth Curved Snake Lines & Arrows -->
+    <svg class="svg-layer" viewBox="0 0 1100 500" preserveAspectRatio="none">
+      <!-- Continuous Snake Curve Path (Desktop) -->
+      <path class="path-bg" d="
+        M 50 50 
+        L 1050 50 
+        C 1120 50, 1120 250, 1050 250 
+        L 50 250 
+        C -20 250, -20 450, 50 450 
+        L 1050 450" 
+      />
+      
+      <!-- Animated Pulsing Energy Beam along the same path -->
+      <path class="path-pulse" d="
+        M 50 50 
+        L 1050 50 
+        C 1120 50, 1120 250, 1050 250 
+        L 50 250 
+        C -20 250, -20 450, 50 450 
+        L 1050 450" 
+      />
+
+      <!-- Decorative Sketch Arrows (Original Image Vibe) -->
+      <!-- Top Left Spiral Loop -->
+      <path d="M 20 20 Q 5 60 30 70 T 50 40" fill="none" stroke="rgba(0, 243, 255, 0.3)" stroke-width="1.5" stroke-dasharray="3 3"/>
+      <!-- Handwritten Arrow Curve Row 2 -->
+      <path d="M 720 290 Q 740 320 710 330" fill="none" stroke="rgba(255, 255, 255, 0.4)" stroke-width="1.5" marker-end="url(#arrow)"/>
+    </svg>
+
+    <!-- Nodes Overlay -->
+    <div class="nodes-container">
+
+      <!-- ================= ROW 1 (Left to Right: 2019 -> 2023) ================= -->
+      <div class="node-row ltr">
+        
+        <!-- Year 2019 -->
+        <div class="timeline-node year-node">
+          <div class="dot-outer"><span class="year-text">2022</span></div>
+          <div class="node-label">10th Board</div>
+          <div class="hover-card">
+            <h3>High School Completed</h3>
+            <p>Built foundation in Mathematics, Physics & Computer Science basics.</p>
+            <span class="tag">Foundation</span>
+          </div>
+        </div>
+
+        <div class="timeline-node">
+          <div class="dot-outer"><div class="dot-inner"></div></div>
+          <div class="node-label">12th Science</div>
+        </div>
+
+        <!-- Year 2021 -->
+        <div class="timeline-node year-node">
+          <div class="dot-outer"><span class="year-text">2024</span></div>
+          <div class="node-label">College Entry</div>
+        </div>
+
+         <div class="timeline-node">
+          <div class="dot-outer"><div class="dot-inner"></div></div>
+          <div class="node-label">linkedin,GitHub activarion</div>
+        </div>
+
+        <!-- Year 2022 -->
+        <div class="timeline-node year-node">
+          <div class="dot-outer"><span class="year-text">2025</span></div>
+          <div class="node-label">C/C++ Mastery</div>
+        </div>
+
+       
+
+        <!-- Year 2023 -->
+        <div class="timeline-node year-node">
+          <div class="dot-outer"><span class="year-text">3sem</span></div>
+          <div class="node-label">Winning "know your constitution Quize"</div>
+        </div>
+
+        <div class="timeline-node">
+          <div class="dot-outer"><div class="dot-inner"></div></div>
+          <div class="node-label">c++,pyton,java,prolog,SQL learning</div>
+          <div class="hover-card">
+            <h3>learning Prompt enginnering</h3>
+            <p>Prompt writing</p>
+            <span class="tag">Achievement</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ================= ROW 2 (Right to Left: 2024 & Hackathons) ================= -->
+      <div class="node-row rtl">
+        
+        <!-- Year 2024 -->
+        <div class="timeline-node year-node">
+          <div class="dot-outer"><span class="year-text">2026</span></div>
+          <div class="node-label">1st Internship (APCSIP)</div>
+        </div>
+
+        <div class="timeline-node">
+          <div class="dot-outer"><div class="dot-inner"></div></div>
+          <div class="node-label">Winning content creator award</div>
+        </div>
+
+        <div class="timeline-node">
+          <div class="dot-outer"><div class="dot-inner"></div></div>
+          <div class="node-label">Tmu smart InternshipSmart India Hackathon 2k26</div>
+          <div class="hover-card">
+            
+            
+          </div>
+        </div>
+
+        <div class="timeline-node">
+          <div class="dot-outer"><div class="dot-inner"></div></div>
+          <div class="node-label">Using RAG,Ollama,Llamma</div>
+        </div>
+
+        <div class="timeline-node">
+          <div class="dot-outer"><div class="dot-inner"></div></div>
+          <div class="node-label">Making Portfolio</div>
+        </div>
+
+        <div class="timeline-node">
+          <div class="dot-outer"><div class="dot-inner"></div></div>
+          <div class="node-label">solving Leetcode problems</div>
+          <!-- Handwritten Doodle Annotation -->
+          <div class="doodle-note" style="top: -35px; right: -10px;">50+✨</div>
+        </div>
+
+      </div>
+
+      <!-- ================= ROW 3 (Left to Right: 2025 -> Future) ================= -->
+      <div class="node-row ltr">
+        
+        <!-- Year 2025 -->
+        <div class="timeline-node year-node">
+          <div class="dot-outer"><span class="year-text">2026</span></div>
+          <div class="node-label">Research Paper on limitaions on rule based learning</div>
+        </div>
+
+        <div class="timeline-node">
+          <div class="dot-outer"><div class="dot-inner"></div></div>
+          <div class="node-label">SRS documentation</div>
+        </div>
+
+        <div class="timeline-node">
+          <div class="dot-outer"><div class="dot-inner"></div></div>
+          <div class="node-label">Internship of bug hunting</div>
+          <div class="hover-card">
+            <h3>CTF compitition playing</h3>
+            <p></p>
+            <span class="tag">Addmission counselor job apply</span>
+          </div>
+        </div>
+
+        <div class="timeline-node">
+          <div class="dot-outer"><div class="dot-inner"></div></div>
+          <div class="node-label">Vibechain(mood based music application)[project]</div>
+        </div>
+
+        <!-- Year 2026 -->
+        <div class="timeline-node year-node">
+          <div class="dot-outer"><span class="year-text">2027</span></div>
+          <div class="node-label">entering 4rth year</div>
+        </div>
+
+        <div class="timeline-node">
+          <div class="dot-outer"><div class="dot-inner"></div></div>
+          <div class="node-label">still working on skills</div>
+          <!-- Handwritten Doodle Annotation -->
+          <div class="doodle-note" style="top: 45px; left: -10px;"></div>
+          <div class="hover-card">
+            <h3>reading favourite Epic</h3>
+            <p>Working on personality development</p>
+            <span class="tag">Success is the sum of small efforts, repeated day-in and day-out</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
